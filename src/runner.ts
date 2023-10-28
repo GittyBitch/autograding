@@ -19,6 +19,7 @@ export interface Test {
   readonly javascript?: string
   file?: string
   readonly feedback?: string
+  readonly urls?: string[]
   readonly input?: string
   readonly output?: string
   readonly timeout: number
@@ -146,8 +147,6 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   else {
 	  programm = test.run || ""
 
-  //log(`Programm= ${programm}`) 
-
   const child = spawn(programm, {
     cwd,
     shell: true,
@@ -254,8 +253,15 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       failed = true
       log('')
       log(color.red(`❌ ${test.name}`))
-      if (test.feedback)
+      if (test.feedback) {
 	      log(color.red(`❌ Tip: ${test.feedback}`))
+	      if (test.urls) {
+      		      log(color.red(`Resources:`))
+		      test.urls.forEach((element) => {
+			        log(color.red(`${element}`))
+		      });
+	      }
+      }
       if (error instanceof Error) {
         core.setFailed(error.message)
       } else {
