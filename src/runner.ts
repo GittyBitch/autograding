@@ -131,15 +131,16 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
   let programm: string
-  log(`test.javascript= ${test.javascript}`) 
+  //log(`test.javascript= ${test.javascript}`) 
   if (test.javascript) {
-  programm = "node -e console.log('Hello, World!')" //`nodejs puppy.js index.html ${test.javascript}`
+  programm = `node -e console.log('Hello, World!')` //`nodejs puppy.js index.html ${test.javascript}`
   log(`test.javascript= ${test.javascript}`) 
   } 
   else
 	  programm = test.run || ""
 
 
+  log(`Programm= ${programm}`) 
 
   const child = spawn(programm, {
     cwd,
