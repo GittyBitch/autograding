@@ -128,6 +128,10 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
+  if (test.javascript) {
+  test.run = "nodejs puppy.js index.html ${test.javascript}"
+  console.log("test.run= ${test.javascript}") 
+  } 
 
   const child = spawn(test.run, {
     cwd,
@@ -235,7 +239,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       failed = true
       log('')
       log(color.red(`❌ ${test.name}`))
-      if ('feedback' in test)
+      if (test.feedback)
 	      log(color.red(`❌ Tip: ${test.feedback}`))
       if (error instanceof Error) {
         core.setFailed(error.message)
