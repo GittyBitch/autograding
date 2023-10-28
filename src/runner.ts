@@ -141,8 +141,12 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   
   log(`test.javascript= ${test.javascript}`) 
   output = await executeJavaScriptFile("index.html", test.javascript);
+  output = output.toString();
   //return;
-
+  /*
+  const expected = test.output || '';
+  const actual = output;
+  */
   } 
   else {
 	  programm = test.run || ""
@@ -181,7 +185,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   }
 
   await waitForExit(child, timeout)
-  
+  } 
 
   // Eventually work off the the test type
   if ((!test.output || test.output == '') && (!test.input || test.input == '')) {
@@ -190,10 +194,10 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 
   const expected = normalizeLineEndings(test.output || '')
   const actual = normalizeLineEndings(output)
-  }
- if ((!test.output || test.output == '') && (!test.input || test.input == '')) {
-    return
-  }
+  
+
+
+
 
 
 
