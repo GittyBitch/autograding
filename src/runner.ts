@@ -13,9 +13,9 @@ export type TestComparison = 'exact' | 'included' | 'regex'
 export interface Test {
   readonly name: string
   readonly setup: string
-  readonly run: string
-  readonly javascript: string
-  readonly feedback: string
+  run?: string
+  readonly javascript?: string
+  readonly feedback?: string
   readonly input?: string
   readonly output?: string
   readonly timeout: number
