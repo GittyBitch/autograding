@@ -133,7 +133,7 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
   let programm: string
-  let output = ''
+  let output:string = ''
 
   //log(`test.javascript= ${test.javascript}`) 
   if (test.javascript) {
