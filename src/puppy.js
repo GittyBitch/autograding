@@ -6,7 +6,9 @@ async function executeJavaScriptFile(htmlFilePath, jsCode) {
   const page = await browser.newPage();
 
   // Load the HTML file
+  console.log("Inside Puppeteer");
   const htmlContent = await fs.readFile(htmlFilePath, 'utf8');
+  console.log("Behind readFile");
   await page.setContent(htmlContent);
 
   // Execute the JavaScript code
