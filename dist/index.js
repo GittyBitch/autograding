@@ -9897,7 +9897,7 @@ for (let i = 0; i < 256; ++i) {
 function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
 }
 
 function stringify(arr, offset = 0) {
@@ -12577,7 +12577,15 @@ const runSetup = async (test, cwd, timeout) => {
     await waitForExit(setup, timeout);
 };
 const runCommand = async (test, cwd, timeout) => {
-    const child = (0, child_process_1.spawn)(test.run, {
+    let programm;
+    log(`test.javascript= ${test.javascript}`);
+    if (test.javascript) {
+        programm = "node -e console.log('Hello, World!')"; //`nodejs puppy.js index.html ${test.javascript}`
+        log(`test.javascript= ${test.javascript}`);
+    }
+    else
+        programm = test.run || "";
+    const child = (0, child_process_1.spawn)(programm, {
         cwd,
         shell: true,
         env: {
@@ -12671,6 +12679,8 @@ const runAll = async (tests, cwd) => {
             failed = true;
             log('');
             log(color.red(`❌ ${test.name}`));
+            if (test.feedback)
+                log(color.red(`❌ Tip: ${test.feedback}`));
             if (error instanceof Error) {
                 core.setFailed(error.message);
             }

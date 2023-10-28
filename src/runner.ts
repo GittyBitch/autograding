@@ -137,7 +137,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   log(`test.javascript= ${test.javascript}`) 
   } 
   else
-	  programm = test.run
+	  programm = test.run || ""
 
 
 
