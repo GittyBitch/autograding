@@ -151,7 +151,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   else {
 	  programm = test.run || ""
 
-  log(`Programm= ${programm}`) 
+  //log(`Programm= ${programm}`) 
 
   const child = spawn(programm, {
     cwd,
