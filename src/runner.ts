@@ -133,18 +133,19 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
   let programm: string
+  let output = ''
+
   //log(`test.javascript= ${test.javascript}`) 
   if (test.javascript) {
-  programm = `node ../src/puppy.js index.html "${test.javascript}"`
+  //programm = `node ../src/puppy.js index.html "${test.javascript}"`
   
   log(`test.javascript= ${test.javascript}`) 
-  executeJavaScriptFile("index.html", "document.querySelectorAll('header a')[0].textContent");
-  return;
+  output = await executeJavaScriptFile("index.html", test.javascript);
+  //return;
 
   } 
-  else
+  else {
 	  programm = test.run || ""
-
 
   log(`Programm= ${programm}`) 
 
@@ -160,7 +161,6 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     },
   })
 
-  let output = ''
 
   // Start with a single new line
   process.stdout.write(indent('\n'))
@@ -181,6 +181,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   }
 
   await waitForExit(child, timeout)
+  }
 
   // Eventually work off the the test type
   if ((!test.output || test.output == '') && (!test.input || test.input == '')) {
