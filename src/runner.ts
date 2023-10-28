@@ -15,8 +15,9 @@ export type TestComparison = 'exact' | 'included' | 'regex'
 export interface Test {
   readonly name: string
   readonly setup: string
-  run?: string
+  readonly run?: string
   readonly javascript?: string
+  file?: string
   readonly feedback?: string
   readonly input?: string
   readonly output?: string
@@ -135,18 +136,12 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   let programm: string
   let output:string = ''
 
-  //log(`test.javascript= ${test.javascript}`) 
   if (test.javascript) {
-  //programm = `node ../src/puppy.js index.html "${test.javascript}"`
-  
-  log(`test.javascript= ${test.javascript}`) 
-  output = await executeJavaScriptFile("index.html", test.javascript);
+  if (!test.file)
+	test.file = "index.html";
+
+  output = await executeJavaScriptFile(test.file, test.javascript);
   output = output.toString();
-  //return;
-  /*
-  const expected = test.output || '';
-  const actual = output;
-  */
   } 
   else {
 	  programm = test.run || ""
@@ -195,12 +190,6 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   const expected = normalizeLineEndings(test.output || '')
   const actual = normalizeLineEndings(output)
   
-
-
-
-
-
-
   switch (test.comparison) {
     case 'exact':
       if (actual != expected) {
