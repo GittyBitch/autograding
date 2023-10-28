@@ -129,10 +129,6 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
 
-  /*if (test.type === "puppeteer") {
-	  //if (test.javascript) 
-  }
-  else if(test.type === "default") */
   const child = spawn(test.run, {
     cwd,
     shell: true,
@@ -239,8 +235,6 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       failed = true
       log('')
       log(color.red(`❌ ${test.name}`))
-      //if ('feedback' in test)
-	//      log(color.red(`❌ Tip: ${test.feedback}`))
       if (error instanceof Error) {
         core.setFailed(error.message)
       } else {
