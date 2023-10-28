@@ -12580,7 +12580,7 @@ const runCommand = async (test, cwd, timeout) => {
     let programm;
     //log(`test.javascript= ${test.javascript}`) 
     if (test.javascript) {
-        programm = `nodejs ../src/puppy.js index.html "${test.javascript}"`;
+        programm = `node ../src/puppy.js index.html "${test.javascript}"`;
         log(`test.javascript= ${test.javascript}`);
     }
     else
