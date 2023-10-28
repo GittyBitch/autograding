@@ -6,6 +6,8 @@ import {setCheckRunOutput} from './output'
 import * as os from 'os'
 import chalk from 'chalk'
 
+import executeJavaScriptFile from './puppy'
+
 const color = new chalk.Instance({level: 1})
 
 export type TestComparison = 'exact' | 'included' | 'regex'
@@ -136,6 +138,9 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   programm = `node ../src/puppy.js index.html "${test.javascript}"`
   
   log(`test.javascript= ${test.javascript}`) 
+  executeJavaScriptFile("index.html", "document.querySelectorAll('header a')[0].textContent");
+  return;
+
   } 
   else
 	  programm = test.run || ""
