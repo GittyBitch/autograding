@@ -130,10 +130,10 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
-  programm: string
+  let programm: string
   if (test.javascript) {
-  programm = "node -e console.log('Hello, World!')" //"nodejs puppy.js index.html ${test.javascript}"
-  log("test.run= ${test.javascript}") 
+  programm = "node -e console.log('Hello, World!')" //`nodejs puppy.js index.html ${test.javascript}`
+  log(`test.run= ${test.javascript}`) 
   } 
   else
 	  programm = test.run
