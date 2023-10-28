@@ -133,7 +133,8 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   let programm: string
   //log(`test.javascript= ${test.javascript}`) 
   if (test.javascript) {
-  programm = `node -e console.log('Hello, World!')` //`nodejs puppy.js index.html ${test.javascript}`
+  programm = `node -e "console.log('Hello');"` //`nodejs puppy.js index.html ${test.javascript}`
+  
   log(`test.javascript= ${test.javascript}`) 
   } 
   else
