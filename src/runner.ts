@@ -291,4 +291,5 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
     core.setOutput('Points', `${points}/${availablePoints}`)
     await setCheckRunOutput(text)
   }
+  process.exit();
 }
