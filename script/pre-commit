@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function file_changed {
+	    git diff --name-only --cached | grep --quiet "$1"
+}
+
+if file_changed '.github/classroom/autograding.json'; then
+ echo "autograding wurde geändert"
+ python3 .git/hooks/updateReadme.py
+ # date >> Readme.md
+fi
+
+
