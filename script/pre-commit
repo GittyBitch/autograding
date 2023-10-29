@@ -8,6 +8,7 @@ if file_changed '.github/classroom/autograding.json'; then
  echo "autograding wurde geändert"
  python3 .git/hooks/updateReadme.py
  # date >> Readme.md
+git add Readme.md
 fi
 
 
