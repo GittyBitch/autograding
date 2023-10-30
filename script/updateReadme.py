@@ -5,63 +5,81 @@ readme = "Readme.md"
 
 
 def write_intro(file, title, content):
-    if(content != None):
+    if content is not None:
         file.write(f"# {title}\n")
         file.write(f"{content}\n")
+
+
 def write_section(file, title, content):
-    if(content != None):
-        file.write(f"## {title}\n")
+    if content is not None:
+        file.write(f"#### {title}\n")
         file.write(f"{content}\n")
-def write_smallsection(file, title):
-        file.write(f"### {title}\n")
-def write_cheatsheet_section(file, title):
-        file.write(f"{title}\n")
 
 
-if "__main__" == __name__:
+def write_smallsection(file, title, content):
+    file.write(f"##### {title}\n")
+    file.write(f"* {content}\n")
+
+
+def write_smallersection(file, title, content):
+    file.write(f"###### {title}\n")
+    file.write(f"* {content}\n")
+
+
+def write_cheatsheet_section(file, title, content):
+    file.write(f"###### {title}\n")
+    file.write(f"{content}\n")
+    
+def write_horizontal_line(file):
+    file.write(f"\n---\n")
+
+
+if __name__ == "__main__":
     with open(filename, 'r', encoding="utf-8") as autograding_file:
-        data = autograding_file.read()
-        data = json.loads(data)
+        data = json.load(autograding_file)
+    
     with open(readme, 'w', encoding="utf-8") as readme_file:
         introduction = data.get("introduction")
         total_points = 0
-        # print the logo
-        logo_url = data.get("logo_url")
-        timeframe = data.get("timeframe", "30 Minuten")
-        if(logo_url != None):
-            readme_file.write(f"![{introduction}]({logo_url})\n")
         for p in data.get("tests"):
             total_points += int(p.get("points",0))
-        introduction += f"\n\nmaximale Punktzahl: {total_points}\n\nZeitfenster: {timeframe}\n"
-        write_intro(readme_file,"Einführung", introduction)
+        logo_url = data.get("logo_url")
+        timeframe = data.get("timeframe", "30 Minuten")
+        
+        if logo_url is not None:
+            readme_file.write(f"<img src=\"{logo_url}\" alt=\"{introduction}\" width=\"300\"/>\n")
+            write_horizontal_line(readme_file)
+        
+        if introduction is not None:
+            write_intro(readme_file, "Aufgabe", introduction)
+            readme_file.write(f"* {total_points} Punkte\n* {timeframe}\n")
+            write_horizontal_line(readme_file)
+        
         for test in data.get("tests"):
             have_specs = test.get("specs")
             points = test.get("points")
             title = have_specs.get("title")
-            readme_file.write(f"# {title} ({points} Punkte)\n")
-            #print the title of the exercise
-            if (have_specs != None):
+            readme_file.write(f"### {title} ({points} Punkte)\n")
+            
+            if have_specs is not None:
                 name = test.get("name")
-                write_section(readme_file, name , "")
-                # print the list of subexercises
+                write_section(readme_file, name, "")
+                
                 if "list" in have_specs:
                     content = ""
                     for l in have_specs["list"]:
-                        content += ("### " + l + "\n")
-                        write_smallsection(readme_file, l)
-                    #write_section(readme_file, have_specs.get("title"), content)
-                # print the code examples for help        
+                        content += (l + "\n")
+                        write_smallsection(readme_file, "Unteraufgaben", l)
+                        
                 if "code_example" in have_specs:
-                    write_smallsection(readme_file, f"`{have_specs.get("code_example")}`")
-                #print ( json.dumps(have_specs, indent=4) );
-
-
-                # print the list of urls for help
+                    write_smallersection(readme_file, "Code-Beispiel:", f"`{have_specs.get("code_example")}`")
+                
                 if "urls" in test:
                     content = ""
                     for l in test["urls"]:
-                       content += ( "### [Spickzettel]("  + l + ") \n")
-                    write_cheatsheet_section(readme_file, content)
+                        content += (f"* [Spickzettel]({l}) \n")
+                    write_cheatsheet_section(readme_file, "Hilfe", content)
+                    write_horizontal_line(readme_file)
                 
     readme_file.close()
     autograding_file.close()
