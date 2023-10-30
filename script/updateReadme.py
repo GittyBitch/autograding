@@ -4,14 +4,18 @@ filename = ".github/classroom/autograding.json"
 readme = "Readme.md"
 
 
-def write_section(file, title, content):
+def write_intro(file, title, content):
     if(content != None):
         file.write(f"# {title}\n")
         file.write(f"{content}\n")
-#def write_test(file, title, content):
-#    if(content != None):
-#        file.write(f"### {title}")
-
+def write_section(file, title, content):
+    if(content != None):
+        file.write(f"## {title}\n")
+        file.write(f"{content}\n")
+def write_smallsection(file, title):
+        file.write(f"### {title}\n")
+def write_cheatsheet_section(file, title):
+        file.write(f"{title}\n")
 
 
 if "__main__" == __name__:
@@ -21,28 +25,34 @@ if "__main__" == __name__:
     with open(readme, 'w', encoding="utf-8") as readme_file:
         introduction = data.get("introduction")
         total_points = 0
+        # print the logo
+        logo_url = data.get("logo_url")
+        timeframe = data.get("timeframe", "30 Minuten")
+        if(logo_url != None):
+            readme_file.write(f"![{introduction}]({logo_url})\n")
         for p in data.get("tests"):
             total_points += int(p.get("points",0))
-        introduction += f"\nmaximale Punktzahl: {total_points}\n"
-        write_section(readme_file, "Einleitung", introduction)
+        introduction += f"\n\nmaximale Punktzahl: {total_points}\n\nZeitfenster: {timeframe}\n"
+        write_intro(readme_file,"Einführung", introduction)
         for test in data.get("tests"):
-            points = test.get("points")
-            name = test.get("name")
-            readme_file.write(f"## {name} ({points} Punkte)\n")
             have_specs = test.get("specs")
-            # print the title of the exercise
+            points = test.get("points")
+            title = have_specs.get("title")
+            readme_file.write(f"# {title} ({points} Punkte)\n")
+            #print the title of the exercise
             if (have_specs != None):
-                title = have_specs.get("title")
-                write_section(readme_file, title, None)
+                name = test.get("name")
+                write_section(readme_file, name , "")
                 # print the list of subexercises
                 if "list" in have_specs:
                     content = ""
                     for l in have_specs["list"]:
-                        content += ("## " + l + "\n")
-                    write_section(readme_file, have_specs.get("title"), content)
+                        content += ("### " + l + "\n")
+                        write_smallsection(readme_file, l)
+                    #write_section(readme_file, have_specs.get("title"), content)
                 # print the code examples for help        
                 if "code_example" in have_specs:
-                    write_section(readme_file, "Code-Beispiel", f"`{have_specs.get("code_example")}`")
+                    write_smallsection(readme_file, f"`{have_specs.get("code_example")}`")
                 #print ( json.dumps(have_specs, indent=4) );
 
 
@@ -51,7 +61,7 @@ if "__main__" == __name__:
                     content = ""
                     for l in test["urls"]:
                        content += ( "### [Spickzettel]("  + l + ") \n")
-                    write_section(readme_file, "Spickzettel", content)
+                    write_cheatsheet_section(readme_file, content)
                 
     readme_file.close()
     autograding_file.close()
