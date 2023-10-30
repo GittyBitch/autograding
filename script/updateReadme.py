@@ -72,7 +72,7 @@ if __name__ == "__main__":
                         write_smallsection(readme_file, "Unteraufgaben", l)
                         
                 if "code_example" in have_specs:
-                    write_smallersection(readme_file, "Code-Beispiel:", f"`{have_specs.get("code_example")}`")
+                    write_smallersection(readme_file, "Code-Beispiel:", f"`{have_specs.get('code_example')}`")
                 
                 if "urls" in test:
                     content = ""
