@@ -19,6 +19,7 @@ export interface Test {
   readonly javascript?: string
   file?: string
   readonly feedback?: string
+  readonly keywords?: string[]
   readonly urls?: string[]
   readonly input?: string
   readonly output?: string
@@ -260,6 +261,16 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
 		      test.urls.forEach((element) => {
 			        log(color.red(`${element}`))
 		      });
+	      }
+	      if (test.keywords) {
+    		log(color.red(`LMGTFY:`))
+		      let lmgtfy_url  = "https://googlethatforyou.com?q="
+		      test.keywords.forEach((element) => {
+			      lmgtfy_url+=encodeURIComponent(element+" ");
+
+		      });
+		      log(color.red(`Hint: ${lmgtfy_url}`))
+
 	      }
       }
       if (error instanceof Error) {

@@ -39,7 +39,13 @@ if __name__ == "__main__":
         data = json.load(autograding_file)
     
     with open(readme, 'w', encoding="utf-8") as readme_file:
-        introduction = data.get("introduction")
+        repo = data.get("repo-name")
+        introduction = ""
+        if repo != None:
+            statusURL = f"https://github.com/{repo}/actions/workflows/classroom.yml/badge.svg"
+            introduction = f"[![GitHub Classroom Workflow]({statusURL}/badge.svg)]({statusURL})"
+
+        introduction += data.get("introduction")
         total_points = 0
         for p in data.get("tests"):
             total_points += int(p.get("points",0))
