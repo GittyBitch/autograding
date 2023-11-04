@@ -5,6 +5,9 @@ import * as core from '@actions/core'
 import {setCheckRunOutput} from './output'
 import * as os from 'os'
 import chalk from 'chalk'
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
+//import * as json from 'json'
 
 import executeJavaScriptFile from './puppy'
 
@@ -15,7 +18,14 @@ export type TestComparison = 'exact' | 'included' | 'regex'
 export interface Test {
   readonly name: string
   readonly setup: string
-  readonly run?: string
+  /* javascript
+   * json
+   * yaml
+   * html
+   * xml 
+   */
+  readonly type?: string
+  run?: string
   readonly javascript?: string
   file?: string
   readonly feedback?: string
@@ -137,6 +147,43 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
   let programm: string
   let output:string = ''
+
+  if(!test.file) 
+        throw new Error(`Missing required parameter: file`)
+
+  //log(`type: {$test.type}`);
+
+  let type = test.type || ""  
+  switch( type.toUpperCase() ) {
+  	 case 'JSON':
+		 //TODO: implement
+		  break;
+	  case 'YAML':
+		  // add: validator + query language (yq) ?
+		  // https://github.com/mikefarah/yq
+		  const yamlConfig = yaml.load(fs.readFileSync(test.file, 'utf8')) as Record<string, any>;
+	  	  log(yamlConfig.name);
+		  test.run = "yq " + test.run+ " "+test.file;
+		  break;
+	  case 'CFN': // CloudFormation
+		  test.run="cfn-lint "+ test.run+ " "+test.file; //TODO: verbose mode
+	  	  //log("CloudFormation Mode");
+		  break;
+	  case 'JMESPATH':
+		  test.run="jp -u -f "+test.file+" "+ test.run;
+	  	  //log("JMESPath");
+		  break;
+	  case 'JAVASCRIPT': //FIXME: rename, dazu müssen wir alle bestehenden Tests anpassen :-/
+		  break;
+	  case 'PYTHONAST': // pip3 install pyastgrep
+		  test.run="pyastgrep \""+test.run+"\" " + test.file
+		  break;
+
+
+	  default:
+		  log(`Unsupported test type: {$test.type}`);
+	  break;
+  }
 
   if (test.javascript) {
   if (!test.file)
