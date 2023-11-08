@@ -24,7 +24,7 @@ export interface Test {
    * html
    * xml 
    */
-  readonly type?: string
+  type?: string
   run?: string
   readonly javascript?: string
   file?: string
@@ -151,6 +151,9 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   if(!test.file && test.type) 
         throw new Error(`Missing required parameter: file`)
 
+  if(!test.type)
+	  test.type = "default"
+
   //log(`type: {$test.type}`);
 
   let type = test.type || ""  
@@ -177,6 +180,8 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 		  break;
 	  case 'PYTHONAST': // pip3 install pyastgrep
 		  test.run="pyastgrep \""+test.run+"\" " + test.file
+		  break;
+	  case 'DEFAULT':
 		  break;
 
 
