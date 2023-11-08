@@ -5,8 +5,8 @@ import * as core from '@actions/core'
 import {setCheckRunOutput} from './output'
 import * as os from 'os'
 import chalk from 'chalk'
-import * as fs from 'fs'
-import * as yaml from 'js-yaml'
+//import * as fs from 'fs'
+//import * as yaml from 'js-yaml'
 //import * as json from 'json'
 
 import executeJavaScriptFile from './puppy'
@@ -148,7 +148,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   let programm: string
   let output:string = ''
 
-  if(!test.file) 
+  if(!test.file && test.type) 
         throw new Error(`Missing required parameter: file`)
 
   //log(`type: {$test.type}`);
@@ -161,9 +161,9 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 	  case 'YAML':
 		  // add: validator + query language (yq) ?
 		  // https://github.com/mikefarah/yq
-		  const yamlConfig = yaml.load(fs.readFileSync(test.file, 'utf8')) as Record<string, any>;
-	  	  log(yamlConfig.name);
-		  test.run = "yq " + test.run+ " "+test.file;
+		  //const yamlConfig = yaml.load(fs.readFileSync(test.file, 'utf8')) as Record<string, any>;
+	  	  //log(yamlConfig.name);
+		  //test.run = "yq " + test.run+ " "+test.file;
 		  break;
 	  case 'CFN': // CloudFormation
 		  test.run="cfn-lint "+ test.run+ " "+test.file; //TODO: verbose mode
