@@ -353,7 +353,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
     }
 
     if(json.incrementalPassRequired && failed)
-	    return
+	    break;
   }
 
   // Restart command processing
