@@ -13,6 +13,7 @@ import executeJavaScriptFile from './puppy'
 
 const color = new chalk.Instance({level: 1})
 
+//TODO: contains, not?
 export type TestComparison = 'exact' | 'included' | 'regex'
 
 export interface Test {
@@ -38,6 +39,12 @@ export interface Test {
   readonly points?: number
   readonly comparison: TestComparison
 }
+
+export interface Json {
+maxTestIndex?: number
+tests: Test[]
+}
+
 
 export class TestError extends Error {
   constructor(message: string) {
@@ -276,10 +283,14 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   await runCommand(test, cwd, timeout)
 }
 
-export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => {
+export const runAll = async (json: Json, cwd: string): Promise<void> => {
+  let tests = json.tests as Array<Test>
   let points = 0
   let availablePoints = 0
   let hasPoints = false
+
+  if(json.maxTestIndex)
+	  log(`max Test Index: ${json.maxTestIndex}`)
 
   // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
   const token = uuidv4()
@@ -305,7 +316,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
         points += test.points
       }
       if (test.dependsOnAll && failed) {
-        throw new Error(`For this test to complete, you need to complete all previous steps without errors.`)
+        throw new TestError(`For this test to complete, you need to complete all previous steps without errors.`)
       }
     } catch (error) {
       failed = true
