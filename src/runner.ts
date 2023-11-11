@@ -291,6 +291,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   let hasPoints = false
   let limit = tests.length
 
+  let outputResults: { [key: string]: string } = {};
   if(json.maxTestIndex) {
 	  log(`max Test Index: ${json.maxTestIndex}`)
 	  limit = json.maxTestIndex
@@ -323,7 +324,8 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       }
      */
 
-      core.setOutput(`test${testCounter}`, "SUCCESS") // default green
+      //core.setOutput(`test${testCounter}`, "SUCCESS") // default green
+      outputResults[ testCounter.toString() ] = "SUCCESS"
       log(color.cyan(`📝 ${test.name}`))
       log('')
       await run(test, cwd)
@@ -339,7 +341,8 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       testCounter +=1
     } catch (error) {
       failed = true
-      core.setOutput(`test[${testCounter}]`, "FAIL") // actual failure
+      outputResults[testCounter.toString()] = "FAILING"
+      //core.setOutput(`test[${testCounter}]`, "FAIL") // actual failure
       log('')
       log(color.red(`❌ ${test.name}`))
       if (test.feedback) {
@@ -393,6 +396,8 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
     core.setOutput('Points', `${points}/${availablePoints}`)
     const percentage = Math.floor(points * 100 / availablePoints);
     core.setOutput('percentage', `${percentage} %`)
+
+    core.setOutput('jsonresults', JSON.stringify(outputResults))
     await setCheckRunOutput(text)
   }
   process.exit();
