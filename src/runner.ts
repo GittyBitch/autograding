@@ -40,7 +40,30 @@ export interface Test {
   readonly comparison: TestComparison
 }
 
+enum HelpMode {
+ zero= 'zero',
+ pipeline= 'pipeline',
+ full= 'full'
+}
+
+function validateJson(input: any): Json | null {
+  if (typeof input !== 'object' || input === null) {
+    return null;
+  }
+
+  // Validate 'helpMode'
+  if (input.helpMode && !(input.helpMode in HelpMode)) {
+    log(`unsupported helpmode: ${input.helpMode}`);
+  }
+
+  // further validation here
+
+  return input as Json;
+}
+
+
 export interface Json {
+readonly helpMode?: HelpMode
 maxTestIndex?: number
 incrementalPassRequired?: boolean
 tests: Test[]
@@ -285,6 +308,7 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
 }
 
 export const runAll = async (json: Json, cwd: string): Promise<void> => {
+  validateJson(json)
   let tests = json.tests as Array<Test>
   let points = 0
   let availablePoints = 0
