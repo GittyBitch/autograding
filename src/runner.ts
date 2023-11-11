@@ -42,6 +42,7 @@ export interface Test {
 
 export interface Json {
 maxTestIndex?: number
+incrementalPassRequired?: boolean
 tests: Test[]
 }
 
@@ -350,6 +351,9 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
         core.setFailed(`Failed to run test '${test.name}'`)
       }
     }
+
+    if(json.incrementalPassRequired && failed)
+	    return
   }
 
   // Restart command processing
