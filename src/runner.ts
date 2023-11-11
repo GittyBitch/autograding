@@ -385,6 +385,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
     const text = `Points ${points}/${availablePoints}`
     log(color.bold.bgCyan.black(text))
     core.setOutput('Points', `${points}/${availablePoints}`)
+    core.setOutput('percentage', `${ points * 100/availablePoints} %`)
     await setCheckRunOutput(text)
   }
   process.exit();
