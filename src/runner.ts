@@ -303,6 +303,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   log('')
 
   let failed = false
+  let testCounter=0
 
   //pre-compute available points, in case we're failing early
   for (const test of tests.slice(0,limit) ) {
@@ -313,6 +314,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   }
  
   for (const test of tests.slice(0,limit) ) {
+	
     try {
       /*
       if (test.points) {
@@ -320,6 +322,8 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
         availablePoints += test.points
       }
      */
+
+      core.setOutput(`test[${testCounter}]`, true) // default green
       log(color.cyan(`📝 ${test.name}`))
       log('')
       await run(test, cwd)
@@ -332,8 +336,10 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       if (test.dependsOnAll && failed) {
         throw new TestError(`For this test to complete, you need to complete all previous steps without errors.`)
       }
+      testCounter +=1
     } catch (error) {
       failed = true
+      core.setOutput(`test[${testCounter}]`, failed) // actual failure
       log('')
       log(color.red(`❌ ${test.name}`))
       if (test.feedback) {
