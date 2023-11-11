@@ -17,6 +17,7 @@ export type TestComparison = 'exact' | 'included' | 'regex'
 
 export interface Test {
   readonly name: string
+  readonly dependsOnAll?: boolean
   readonly setup: string
   /* javascript
    * json
@@ -149,7 +150,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   let output:string = ''
 
   if(!test.file && test.type) 
-        throw new Error(`Missing required parameter: file`)
+        throw new Error(`Missing required parameter: file for test type:${test.type}`)
 
   if(!test.type)
 	  test.type = "default"
@@ -157,6 +158,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   //log(`type: {$test.type}`);
 
   let type = test.type || ""  
+  // TODO: hier ne Schleife rein, damit run ein Array sein  kann
   switch( type.toUpperCase() ) {
   	 case 'JSON':
 		 //TODO: implement
@@ -301,6 +303,9 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       log(``)
       if (test.points) {
         points += test.points
+      }
+      if (test.dependsOnAll) {
+        throw new Error(`For this test to complete, you need to complete all previous steps without errors.`)
       }
     } catch (error) {
       failed = true
