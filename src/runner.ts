@@ -304,7 +304,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       if (test.points) {
         points += test.points
       }
-      if (test.dependsOnAll) {
+      if (test.dependsOnAll && failed) {
         throw new Error(`For this test to complete, you need to complete all previous steps without errors.`)
       }
     } catch (error) {
