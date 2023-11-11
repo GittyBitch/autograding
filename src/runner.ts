@@ -323,7 +323,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       }
      */
 
-      core.setOutput(`test[${testCounter}]`, true) // default green
+      core.setOutput(`test${testCounter}`, "SUCCESS") // default green
       log(color.cyan(`📝 ${test.name}`))
       log('')
       await run(test, cwd)
@@ -339,7 +339,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       testCounter +=1
     } catch (error) {
       failed = true
-      core.setOutput(`test[${testCounter}]`, failed) // actual failure
+      core.setOutput(`test[${testCounter}]`, "FAIL") // actual failure
       log('')
       log(color.red(`❌ ${test.name}`))
       if (test.feedback) {
