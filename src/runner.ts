@@ -27,6 +27,8 @@ export interface Test {
    * xml 
    */
   type?: string
+  shell?: string // sh by default
+  shellArgs?: string
   run?: string
   readonly javascript?: string
   file?: string
@@ -40,9 +42,11 @@ export interface Test {
   readonly comparison: TestComparison
 }
 
+// TODO needs to be used below
 enum HelpMode {
  zero= 'zero',
  pipeline= 'pipeline',
+ keywords= 'keywords-only',
  full= 'full'
 }
 
@@ -55,6 +59,13 @@ function validateJson(input: any): Json | null {
   if (input.helpMode && !(input.helpMode in HelpMode)) {
     log(`unsupported helpmode: ${input.helpMode}`);
   }
+
+  // Validate 'helpMode'
+  if (input.shell && !(input.shellArgs)) {
+    log(`no shell args set for custom shell ${input.shell}`);
+  }
+
+
 
   // further validation here
 
@@ -231,11 +242,14 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   output = output.toString();
   } 
   else {
-	  programm = test.run || ""
+	  if (!test.shell)
+	  	programm = test.run || ""
+	  else
+		programm = test.shell + " " + test.shellArgs + " '" + test.run+ "'"
 
   const child = spawn(programm, {
     cwd,
-    shell: true,
+    shell:true,
     env: {
       PATH: process.env['PATH'],
       FORCE_COLOR: 'true',
@@ -244,6 +258,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
       HOME: process.env['HOME'],
     },
   })
+
 
 
   // Start with a single new line
