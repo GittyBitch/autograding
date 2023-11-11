@@ -304,12 +304,22 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
 
   let failed = false
 
+  //pre-compute available points, in case we're failing early
   for (const test of tests.slice(0,limit) ) {
-    try {
       if (test.points) {
         hasPoints = true
         availablePoints += test.points
       }
+  }
+ 
+  for (const test of tests.slice(0,limit) ) {
+    try {
+      /*
+      if (test.points) {
+        hasPoints = true
+        availablePoints += test.points
+      }
+     */
       log(color.cyan(`📝 ${test.name}`))
       log('')
       await run(test, cwd)
