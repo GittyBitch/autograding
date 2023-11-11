@@ -288,9 +288,12 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   let points = 0
   let availablePoints = 0
   let hasPoints = false
+  let limit = tests.length
 
-  if(json.maxTestIndex)
+  if(json.maxTestIndex) {
 	  log(`max Test Index: ${json.maxTestIndex}`)
+	  limit = json.maxTestIndex
+  }
 
   // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
   const token = uuidv4()
@@ -300,7 +303,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
 
   let failed = false
 
-  for (const test of tests) {
+  for (const test of tests.slice(0,limit) ) {
     try {
       if (test.points) {
         hasPoints = true
