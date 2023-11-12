@@ -347,10 +347,14 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
 
   //pre-compute available points, in case we're failing early
   for (const test of tests.slice(0,limit) ) {
+      let myCounter=1
       if (test.points) {
         hasPoints = true
         availablePoints += test.points
       }
+      // CHECK ME: pre-fail all tests to ensure that these failed if one failure occurs ?
+      outputResults[myCounter.toString()] = "FAILING"
+      myCounter ++
   }
  
   for (const test of tests.slice(0,limit) ) {
