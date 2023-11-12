@@ -384,6 +384,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
     } catch (error) {
       failed = true
       outputResults[testCounter.toString()] = "FAILING"
+      testCounter++
       //core.setOutput(`test[${testCounter}]`, "FAIL") // actual failure
       log('')
       log(color.red(`❌ ${test.name}`))
