@@ -346,15 +346,15 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   let testCounter=1
 
   //pre-compute available points, in case we're failing early
-  let myCounter=0
+  let myCounter=1
   for (const test of tests.slice(0,limit) ) {
       if (test.points) {
         hasPoints = true
         availablePoints += test.points
       }
       // CHECK ME: pre-fail all tests to ensure that these failed if one failure occurs ?
-      myCounter ++
       outputResults[myCounter.toString()] = "FAILING"
+      myCounter ++
   }
  
   for (const test of tests.slice(0,limit) ) {
@@ -437,6 +437,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
     const text = `Points ${points}/${availablePoints}`
     log(color.bold.bgCyan.black(text))
     core.setOutput('Points', `${points}/${availablePoints}`)
+
     const percentage = Math.floor(points * 100 / availablePoints);
     core.setOutput('percentage', `${percentage} %`)
 
