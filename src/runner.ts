@@ -409,7 +409,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
         core.setFailed(`Failed to run test '${test.name}'`)
       }
     }
-    log(`${test.name} incrementing counter, now: ${testCounter}`)
+    //log(`${test.name} incrementing counter, now: ${testCounter}`)
     testCounter++
     if(json.incrementalPassRequired && failed)
 	    break;
