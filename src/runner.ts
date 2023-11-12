@@ -440,8 +440,8 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
     const percentage = Math.floor(points * 100 / availablePoints);
     core.setOutput('percentage', `${percentage} %`)
 
-    core.setOutput('jsonresults', JSON.stringify(outputResults))
     await setCheckRunOutput(text)
   }
+    core.setOutput('jsonresults', JSON.stringify(outputResults))
   process.exit();
 }
