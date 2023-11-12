@@ -367,8 +367,6 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       }
      */
 
-      //core.setOutput(`test${testCounter}`, "SUCCESS") // default green
-      outputResults[ testCounter.toString() ] = "SUCCESS"
       log(color.cyan(`📝 ${test.name}`))
       log('')
       await run(test, cwd)
@@ -381,6 +379,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       if (test.dependsOnAll && failed) {
         throw new TestError(`For this test to complete, you need to complete all previous steps without errors.`)
       }
+      outputResults[ testCounter.toString() ] = "SUCCESS"
       testCounter +=1
     } catch (error) {
       failed = true
