@@ -346,6 +346,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   let testCounter=1
 
   //pre-compute available points, in case we're failing early
+  //set all badges to failed
   let myCounter=1
   for (const test of tests.slice(0,limit) ) {
       if (test.points) {
@@ -379,13 +380,10 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
       if (test.dependsOnAll && failed) {
         throw new TestError(`For this test to complete, you need to complete all previous steps without errors.`)
       }
-      outputResults[ testCounter.toString() ] = "SUCCESS"
-      
+      outputResults[testCounter.toString()] = "SUCCESS"
     } catch (error) {
       failed = true
       outputResults[testCounter.toString()] = "FAILING"
-      
-      //core.setOutput(`test[${testCounter}]`, "FAIL") // actual failure
       log('')
       log(color.red(`❌ ${test.name}`))
       if (test.feedback) {
@@ -401,10 +399,8 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
 		      let lmgtfy_url  = "https://googlethatforyou.com?q="
 		      test.keywords.forEach((element) => {
 			      lmgtfy_url+=encodeURIComponent(element+" ");
-
 		      });
 		      log(color.red(`Hint: ${lmgtfy_url}`))
-
 	      }
       }
       if (error instanceof Error) {
@@ -413,11 +409,11 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
         core.setFailed(`Failed to run test '${test.name}'`)
       }
     }
+    log(`${test.name} incrementing counter, now: ${testCounter}`)
     testCounter++
     if(json.incrementalPassRequired && failed)
 	    break;
   }
-
   // Restart command processing
   log('')
   log(`::${token}::`)
@@ -443,7 +439,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
 
     await setCheckRunOutput(text)
   }
-    log( JSON.stringify(outputResults) )
-    core.setOutput('jsonresults', JSON.stringify(outputResults))
+  //log( JSON.stringify(outputResults) )
+  core.setOutput('jsonresults', JSON.stringify(outputResults))
   process.exit();
 }
