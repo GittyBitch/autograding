@@ -443,6 +443,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
 
     await setCheckRunOutput(text)
   }
+    log( JSON.stringify(outputResults) )
     core.setOutput('jsonresults', JSON.stringify(outputResults))
   process.exit();
 }
