@@ -380,11 +380,11 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
         throw new TestError(`For this test to complete, you need to complete all previous steps without errors.`)
       }
       outputResults[ testCounter.toString() ] = "SUCCESS"
-      testCounter +=1
+      
     } catch (error) {
       failed = true
       outputResults[testCounter.toString()] = "FAILING"
-      testCounter++
+      
       //core.setOutput(`test[${testCounter}]`, "FAIL") // actual failure
       log('')
       log(color.red(`❌ ${test.name}`))
@@ -413,7 +413,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
         core.setFailed(`Failed to run test '${test.name}'`)
       }
     }
-
+    testCounter++
     if(json.incrementalPassRequired && failed)
 	    break;
   }
