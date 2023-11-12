@@ -441,5 +441,5 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   }
   //log( JSON.stringify(outputResults) )
   core.setOutput('jsonresults', JSON.stringify(outputResults))
-  process.exit();
+  process.exit(failed ? -1: 0);
 }
