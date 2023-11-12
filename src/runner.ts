@@ -343,7 +343,7 @@ export const runAll = async (json: Json, cwd: string): Promise<void> => {
   log('')
 
   let failed = false
-  let testCounter=0
+  let testCounter=1
 
   //pre-compute available points, in case we're failing early
   let myCounter=0
