@@ -236,9 +236,12 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 		  }
 		  // Hack:
 		  let check=test.run
-		  //test.run=`echo "${check}" >> ${test.file} &&` 
-		  test.run=`sqlite3 -batch -bail ${dbName} < ${test.file} && echo "${check}" | sqlite3 -batch -bail ${dbName}|| exit 200`
-		  //log(`Executing: \n ${test.run}`)
+		  //test.run=`echo "${check}" >> ${test.file} &&`
+		  if (test.file)
+		  	test.run=`sqlite3 -batch -bail ${dbName} < ${test.file} && echo "${check}" | sqlite3 -batch -bail ${dbName}|| exit 200`
+		else
+		  	test.run=`sqlite3 -batch -bail ${dbName} && echo "${check}" | sqlite3 -batch -bail ${dbName}|| exit 200`
+			//log(`Executing: \n ${test.run}`)
 		  break;
 	  case 'DEFAULT':
 		  break;
