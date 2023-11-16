@@ -27,6 +27,7 @@ export interface Test {
    * xml 
    */
   type?: string
+  dbName?: string //for DB related stuff having to use the same DB
   shell?: string // sh by default
   shellArgs?: string
   run?: string
@@ -224,6 +225,20 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 		  break;
 	  case 'PYTHONAST': // pip3 install pyastgrep
 		  test.run="pyastgrep \""+test.run+"\" " + test.file
+		  break;
+	  case 'SQLITE3':
+		  let dbName=""
+		  if (test.dbName) {
+		   dbName=test.dbName
+	  	  }
+		  else {
+			  log("Warning: dbName key is missing, using temporary db - this may not be what you want")
+		  }
+		  // Hack:
+		  let check=test.run
+		  //test.run=`echo "${check}" >> ${test.file} &&` 
+		  test.run=`sqlite3 -batch -bail ${dbName} < ${test.file} && echo "${check}" | sqlite3 -batch -bail ${dbName}|| exit -1`
+		  //log(`Executing: \n ${test.run}`)
 		  break;
 	  case 'DEFAULT':
 		  break;
