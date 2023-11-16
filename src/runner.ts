@@ -192,7 +192,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   let programm: string
   let output:string = ''
 
-  if(!test.file && test.type && test.type != "SQLITE3") 
+  if(!test.file && test.type && test.type.toUpperCase() != "SQLITE3") 
         throw new Error(`Missing required parameter: file for test type:${test.type}`)
 
   if(!test.type)
