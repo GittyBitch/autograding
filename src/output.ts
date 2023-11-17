@@ -3,12 +3,12 @@ import * as github from '@actions/github'
 
 export const setCheckRunOutput = async (text: string): Promise<void> => {
   // If we have nothing to output, then bail
-  if (text === '') return
+  if (text === '') {core.setFailed("no text"); return; }
 
   // Our action will need to API access the repository so we require a token
   // This will need to be set in the calling workflow, otherwise we'll exit
   const token = process.env['GITHUB_TOKEN'] || core.getInput('token')
-  if (!token || token === '') return
+  if (!token || token === '') {core.setFailed("no token"); return}
 
   // Create the octokit client
   const octokit = github.getOctokit(token)
@@ -19,12 +19,12 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   // We'll split this into two separate variables for later use
   const nwo = process.env['GITHUB_REPOSITORY'] || '/'
   const [owner, repo] = nwo.split('/')
-  if (!owner) return
-  if (!repo) return
+  if (!owner) {core.setFailed("no repo owner"); return;}
+  if (!repo) {core.setFailed("no repo"); return;}
 
   // We need the workflow run id
   const runId = parseInt(process.env['GITHUB_RUN_ID'] || '')
-  if (Number.isNaN(runId)) return
+  if (Number.isNaN(runId)) {core.setFailed("no run ID"); return; }
 
   // Fetch the workflow run
   const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
