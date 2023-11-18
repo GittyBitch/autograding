@@ -40,7 +40,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   const checkRunsResponse = await octokit.rest.checks.listForSuite({
     owner,
     repo,
-    check_name: 'Autograding',
+    check_name: 'call-classroom-workflow / Autograding',
     check_suite_id: checkSuiteId,
   })
   const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0]
