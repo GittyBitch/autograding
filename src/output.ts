@@ -35,6 +35,8 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     run_id: runId,
   })
 
+  if (!workflowRunResponse) {core.setFailed("No workflow run response");return;}
+
   // Find the check suite run
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const checkSuiteUrl = (workflowRunResponse.data as any).check_suite_url
@@ -58,7 +60,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     repo,
     check_run_id: checkRun.id,
     output: {
-      title: 'Autograding / Autograding',
+      title: 'Autograding',
       summary: text,
       text: text,
       annotations: [
@@ -74,4 +76,5 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
       ],
     },
   })
+  core.info(`setCheckRunOutput() finished`)
 }
