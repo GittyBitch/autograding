@@ -54,7 +54,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     repo,
     check_run_id: checkRun.id,
     output: {
-      title: 'call-classroom-workflow / Autograding',
+      title: 'Autograding',
       summary: text,
       text: text,
       annotations: [
