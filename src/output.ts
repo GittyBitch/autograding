@@ -58,7 +58,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     repo,
     check_run_id: checkRun.id,
     output: {
-      title: 'Autograding',
+      title: 'Autograding / Autograding',
       summary: text,
       text: text,
       annotations: [
