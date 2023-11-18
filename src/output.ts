@@ -26,6 +26,8 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   const runId = parseInt(process.env['GITHUB_RUN_ID'] || '')
   if (Number.isNaN(runId)) {core.setFailed("no run ID"); return; }
 
+
+
   // Fetch the workflow run
   const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
     owner,
@@ -46,6 +48,8 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0]
   if (!checkRun) {core.setFailed("No check run");return;}
 
+  core.info(`TOKEN: ${token} | REPO-URL: ${nwo} | OWNER: ${owner} | REPO: ${repo}`)
+  core.info(`URL: ${checkSuiteUrl} | checkSuiteId: ${checkSuiteId} | RESPONSE: ${checkRunsResponse} | checkRun: ${checkRun}`)
   // Update the checkrun, we'll assign the title, summary and text even though we expect
   // the title and summary to be overwritten by GitHub Actions (they are required in this call)
   // We'll also store the total in an annotation to future-proof
